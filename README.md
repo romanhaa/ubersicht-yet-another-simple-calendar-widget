@@ -17,3 +17,7 @@ Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](
 
 - Place the [`calendar.coffee`](calendar.coffee) file in the Übersicht widgets directory.
 - Open the `calendar.coffee` file and adjust values in the "CUSTOMIZE ME" section to adjust widget placement and size.
+
+## Ideas for enhancements
+
+- Buttons to switch date (at least +/- 1 day)
