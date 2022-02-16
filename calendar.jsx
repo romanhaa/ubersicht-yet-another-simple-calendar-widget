@@ -97,6 +97,11 @@ const Events = ({date, output}) => {
 
 const Event = ({event, current_time}) => {
     const border_thickness = (event.start_time <= current_time && event.end_time >= current_time) ? 8 : 4
+    const color = (
+            current_time - event.start_time >= -0.5 &&
+            current_time <= event.end_time
+        )
+        ? "#e74c3c" : "#FFFFFF"
     return (
         <div
             id={event.title}
@@ -109,7 +114,7 @@ const Event = ({event, current_time}) => {
                 paddingBottom: "4px",
                 paddingLeft: "5px",
                 mixBlendMode: "multiply",
-                color: "#FFFFFF",
+                color: `${color}`,
                 overflow: "hidden",
                 marginBottom: "5px",
                 width: `${WIDTH-5}px`,
@@ -118,20 +123,20 @@ const Event = ({event, current_time}) => {
             }}
         >
             {`${timeToHhMm(event.start_time)} - ${timeToHhMm(event.end_time)}`}
-            <Link label="zoom" value={event.zoom_link} />
-            <Link label="gmeet" value={event.gmeet_link} />
-            <Link label="teams" value={event.teams_link} />
+            <Link label="zoom" value={event.zoom_link} color={color} />
+            <Link label="gmeet" value={event.gmeet_link} color={color} />
+            <Link label="teams" value={event.teams_link} color={color} />
             <br/>
             {event.title}
         </div>
     )
 }
 
-const Link = ({label, value}) => (
+const Link = ({label, value, color}) => (
     value != "" ? (
             <a class="meeting-link" href={value} style={{
                 marginLeft: "5px",
-                color: "#FFFFFF"
+                color: `${color}`,
             }}>
                 [{label}]
             </a>
