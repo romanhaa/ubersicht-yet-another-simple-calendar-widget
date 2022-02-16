@@ -77,9 +77,7 @@ const Events = ({date, output}) => {
     lines.forEach(line => {
         const result = line_regex.exec(line)
         events.push({
-            // 'start_date': result[1],
             'start_time': hours(result[2]),
-            // 'end_date': result[3] or result[1],
             'end_time': hours(result[4]),
             'title': result[5],
             'zoom_link': getLink(result[6], zoom_link_regex),
