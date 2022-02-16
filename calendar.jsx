@@ -14,7 +14,7 @@ const BOTTOM = 24 // bottom margin
 const executablePath = "/usr/local/bin/icalBuddy "
 // baseCommand = " eventsFrom:yesterday to:yesterday"
 const baseCommand = " eventsToday"
-const options = "-ea -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,notes' -ps '||' -po 'datetime,title,notes' -tf '%H:%M' -df '%Y-%m-%d'"
+const options = "-ea -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,notes' -ps '||' -po 'datetime,title,location,notes' -tf '%H:%M' -df '%Y-%m-%d'"
 export const command = executablePath + options + baseCommand
 
 // refresh frequency in milliseconds
@@ -70,7 +70,7 @@ const Header = ({date}) => {
 const Events = ({date, output}) => {
     const lines = output.split('\n').filter(item => item)
     const current_time = date.getHours() + date.getMinutes() / 60
-    const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?$/
+    const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/
     const zoom_link_regex = /(https:\/\/.*zoom.*\/j\/[^ ]*)/
     const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ ]*)/
     const events = []
@@ -80,8 +80,8 @@ const Events = ({date, output}) => {
             'start_time': hours(result[2]),
             'end_time': hours(result[4]),
             'title': result[5],
-            'zoom_link': getLink(result[6], zoom_link_regex),
-            'gmeet_link': getLink(result[6], gmeet_link_regex),
+            'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
+            'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
         })
     })
     return (
