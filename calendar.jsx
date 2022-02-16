@@ -94,7 +94,7 @@ const Events = ({date, output}) => {
 }
 
 const Event = ({event, current_time}) => {
-    const border_thickness = (event.start_time <= current_time && event.end_time >= current_time) ? 12 : 4
+    const border_thickness = (event.start_time <= current_time && event.end_time >= current_time) ? 8 : 4
     return (
         <div
             id={event.title}
