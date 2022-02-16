@@ -73,6 +73,7 @@ const Events = ({date, output}) => {
     const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/
     const zoom_link_regex = /(https:\/\/.*zoom.*\/j\/[^ ]*)/
     const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ ]*)/
+    const teams_link_regex = /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ ]*)/
     const events = []
     lines.forEach(line => {
         const result = line_regex.exec(line)
@@ -82,6 +83,7 @@ const Events = ({date, output}) => {
             'title': result[5],
             'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
             'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
+            'teams_link': getLink(result[6], teams_link_regex) || getLink(result[7], teams_link_regex),
         })
     })
     return (
@@ -118,6 +120,7 @@ const Event = ({event, current_time}) => {
             {`${timeToHhMm(event.start_time)} - ${timeToHhMm(event.end_time)}`}
             <Link label="zoom" value={event.zoom_link} />
             <Link label="gmeet" value={event.gmeet_link} />
+            <Link label="teams" value={event.teams_link} />
             <br/>
             {event.title}
         </div>
