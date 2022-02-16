@@ -71,9 +71,9 @@ const Events = ({date, output}) => {
     const lines = output.split('\n').filter(item => item)
     const current_time = date.getHours() + date.getMinutes() / 60
     const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/
-    const zoom_link_regex = /(https:\/\/.*zoom.*\/j\/[^ ]*)/
-    const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ ]*)/
-    const teams_link_regex = /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ ]*)/
+    const zoom_link_regex = /(https:\/\/.*zoom.*\/j\/[^ >]*)/
+    const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ >]*)/
+    const teams_link_regex = /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ >]*)/
     const events = []
     lines.forEach(line => {
         const result = line_regex.exec(line)
