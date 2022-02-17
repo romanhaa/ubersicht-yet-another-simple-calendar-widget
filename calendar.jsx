@@ -37,19 +37,9 @@ export const className = `
     z-index: 0;
 `
 
-function timeToHhMm(time) {
-    const hh = Math.floor(Math.abs(time))
-    var mm = Math.floor(((time - hh) * 60) % 60)
-    if (mm < 10) {
-        mm = "0" + mm
-    }
-    return hh + ":" + mm
-}
-
-function hours(str) {
-    const regex = /(\d+):(\d+)/
-    const result = regex.exec(str)
-    return parseInt(result[1]) + parseInt(result[2])/60
+function convertStrTimeToDecimal(str) {
+    const result = str.split(":")
+    return parseInt(result[0]) + parseInt(result[1])/60
 }
 
 function getLink(str, regex) {
@@ -79,8 +69,10 @@ const Events = ({date, output}) => {
     lines.forEach(line => {
         const result = line_regex.exec(line)
         events.push({
-            'start_time': hours(result[2]),
-            'end_time': hours(result[4]),
+            'start_time_str': result[2].replace(/^0+/, ""),
+            'start_time': convertStrTimeToDecimal(result[2]),
+            'end_time_str': result[4].replace(/^0+/, ""),
+            'end_time': convertStrTimeToDecimal(result[4]),
             'title': result[5],
             'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
             'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
@@ -89,9 +81,12 @@ const Events = ({date, output}) => {
     })
     return (
         <div id="events">
-            {events.map(event => {
-                return <Event event={event} current_time={current_time} />
-            })}
+            {events
+                .sort((a, b) => a.start_time - b.start_time || a.end_time - b.end_time)
+                .map(event => {
+                    return <Event event={event} current_time={current_time} />
+                })
+            }
         </div>
     )
 }
@@ -123,7 +118,7 @@ const Event = ({event, current_time}) => {
                 borderLeft: `solid ${border_thickness}px`,
             }}
         >
-            {`${timeToHhMm(event.start_time)} - ${timeToHhMm(event.end_time)}`}
+            {`${event.start_time_str} - ${event.end_time_str}`}
             <Link label="zoom" value={event.zoom_link} color={color} />
             <Link label="gmeet" value={event.gmeet_link} color={color} />
             <Link label="teams" value={event.teams_link} color={color} />
