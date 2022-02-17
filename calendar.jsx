@@ -93,11 +93,10 @@ const Events = ({date, output}) => {
 
 const Event = ({event, current_time}) => {
     const border_thickness = (event.start_time <= current_time && event.end_time >= current_time) ? 8 : 4
-    const color = (
+    const color = (current_time >= event.end_time) ? "#808080" : (
             current_time - event.start_time >= -0.5 &&
             current_time <= event.end_time
-        )
-        ? "#e74c3c" : "#FFFFFF"
+        ) ? "#e74c3c" : "#FFFFFF"
     return (
         <div
             id={event.title}
