@@ -37,6 +37,26 @@ export const className = `
     z-index: 0;
 `
 
+function processEvents(current_time, output) {
+    const lines = output.split('\n').filter(item => item)
+    const events = []
+    lines.forEach(line => {
+        const result = line_regex.exec(line)
+        events.push({
+            'start_time_str': result[2].replace(/^0+/, ""),
+            'start_time': convertStrTimeToDecimal(result[2]),
+            'end_time_str': result[4].replace(/^0+/, ""),
+            'end_time': convertStrTimeToDecimal(result[4]),
+            // 'title': result[5].includes("Open Targets standup") ? "Google Meet call" : result[5].includes("OpenTargets weekly call") ? "Teams call" : result[5].includes("cGenTar") ? "Google Meet call" : result[5].includes("biweekly") ? "Google Meet call" : result[5].includes("Giulia") ? "Meeting without link" : result[5].includes("Nabeel") ? "Zoom call" : result[5].includes("SAN ONCO") ? "Zoom call" : result[5],
+            'title': result[5],
+            'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
+            'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
+            'teams_link': getLink(result[6], teams_link_regex) || getLink(result[7], teams_link_regex),
+        })
+    })
+    return events
+}
+
 function convertStrTimeToDecimal(str) {
     const result = str.split(":")
     return parseInt(result[0]) + parseInt(result[1])/60
@@ -63,22 +83,8 @@ const Header = ({date}) => {
 }
 
 const Events = ({date, output}) => {
-    const lines = output.split('\n').filter(item => item)
     const current_time = date.getHours() + date.getMinutes() / 60
-    const events = []
-    lines.forEach(line => {
-        const result = line_regex.exec(line)
-        events.push({
-            'start_time_str': result[2].replace(/^0+/, ""),
-            'start_time': convertStrTimeToDecimal(result[2]),
-            'end_time_str': result[4].replace(/^0+/, ""),
-            'end_time': convertStrTimeToDecimal(result[4]),
-            'title': result[5],
-            'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
-            'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
-            'teams_link': getLink(result[6], teams_link_regex) || getLink(result[7], teams_link_regex),
-        })
-    })
+    const events = processEvents(current_time, output)
     return (
         <div id="events">
             {
