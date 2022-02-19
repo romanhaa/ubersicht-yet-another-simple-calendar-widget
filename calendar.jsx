@@ -81,11 +81,14 @@ const Events = ({date, output}) => {
     })
     return (
         <div id="events">
-            {events
-                .sort((a, b) => a.start_time - b.start_time || a.end_time - b.end_time)
-                .map(event => {
-                    return <Event event={event} current_time={current_time} />
-                })
+            {
+                events.length > 0 ? (
+                    events
+                    .sort((a, b) => a.start_time - b.start_time || a.end_time - b.end_time)
+                    .map(event => {
+                        return <Event event={event} current_time={current_time} />
+                    })
+                ) : <span style={{fontSize: "12px"}}>No events today.</span>
             }
         </div>
     )
