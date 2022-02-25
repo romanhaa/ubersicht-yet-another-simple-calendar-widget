@@ -7,6 +7,7 @@ const WIDTH = 250 // width of the widget
 const TOP = 400 // top margin
 const LEFT = 24 // left margin
 const BOTTOM = 24 // bottom margin
+const REFRESH_FREQUENCY = 60 // widget refresh frequency in seconds
 // --------------------------------------------
 
 const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/
@@ -23,7 +24,7 @@ const options = "-ea -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,
 export const command = executablePath + options + baseCommand
 
 // refresh frequency in milliseconds
-export const refreshFrequency = 60 * 1000
+export const refreshFrequency = REFRESH_FREQUENCY * 1000;
 
 export const className = `
     top: ${TOP}px;
