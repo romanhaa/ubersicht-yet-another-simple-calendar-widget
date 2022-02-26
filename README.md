@@ -2,12 +2,14 @@
 
 This [Übersicht](http://tracesof.net/uebersicht/) widget displays calendar events.
 
-![Example](example.png "Example")
+<img src="example.png" width="200px">
+<img src="example-no-events.png" width="200px">
 
 If an event has a Zoom, Google Meet and/or Teams link attached to it (as location or in notes), a link will be shown to join the respective call.
 
-Events that start within the next 30 minutes will be highlighted with red text.
-A currently ongoing event will be highlighted, in addition to red text, with a thicker bar on the left side.
+A currently ongoing event will be highlighted with red text and with a thicker bar on the left side.
+Events that start within the next 30 minutes will be highlighted with red text only.
+Past events use grey text.
 
 It requires a dark background or modifications to the colors to be properly readable.
 
