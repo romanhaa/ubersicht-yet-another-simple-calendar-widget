@@ -48,11 +48,10 @@ function processEvents(current_time, output) {
             'start_time': convertStrTimeToDecimal(result[2]),
             'end_time_str': result[4].replace(/^0+/, ""),
             'end_time': convertStrTimeToDecimal(result[4]),
-            // 'title': result[5].includes("Open Targets standup") ? "Google Meet call" : result[5].includes("OpenTargets weekly call") ? "Teams call" : result[5].includes("cGenTar") ? "Google Meet call" : result[5].includes("biweekly") ? "Google Meet call" : result[5].includes("Giulia") ? "Meeting without link" : result[5].includes("Nabeel") ? "Zoom call" : result[5].includes("SAN ONCO") ? "Zoom call" : result[5],
             'title': result[5],
-            'zoom_link': getLink(result[6], zoom_link_regex) || getLink(result[7], zoom_link_regex),
-            'gmeet_link': getLink(result[6], gmeet_link_regex) || getLink(result[7], gmeet_link_regex),
-            'teams_link': getLink(result[6], teams_link_regex) || getLink(result[7], teams_link_regex),
+            'zoom_link': getLink(result[6] + " " + result[7], zoom_link_regex),
+            'gmeet_link': getLink(result[6] + " " + result[7], gmeet_link_regex),
+            'teams_link': getLink(result[6] + " " + result[7], teams_link_regex),
         })
     })
     return events
@@ -64,9 +63,9 @@ function convertStrTimeToDecimal(str) {
 }
 
 function getLink(str, regex) {
-    const link = regex.exec(str)
-    if (Array.isArray(link) && link.length > 1) {
-        return link[0]
+    const links = regex.exec(str)
+    if (Array.isArray(links) && links.length > 1) {
+        return [...new Set(links)]
     } else {
         return ""
     }
@@ -128,25 +127,25 @@ const Event = ({event, current_time}) => {
             }}
         >
             {`${event.start_time_str} - ${event.end_time_str}`}
-            <Link label="zoom" value={event.zoom_link} color={color} />
-            <Link label="gmeet" value={event.gmeet_link} color={color} />
-            <Link label="teams" value={event.teams_link} color={color} />
+            <Link label="zoom" values={event.zoom_link} color={color} />
+            <Link label="gmeet" values={event.gmeet_link} color={color} />
+            <Link label="teams" values={event.teams_link} color={color} />
             <br/>
             {event.title}
         </div>
     )
 }
 
-const Link = ({label, value, color}) => (
-    value != "" ? (
+const Link = ({label, values, color}) => (
+    values === "" ? null :
+        values.map(value => (
             <a class="meeting-link" href={value} style={{
                 marginLeft: "5px",
                 color: `${color}`,
             }}>
                 [{label}]
             </a>
-        )
-    : null
+        ))
 )
 
 export const render = ({ output }) => {
