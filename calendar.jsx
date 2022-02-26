@@ -11,7 +11,7 @@ const REFRESH_FREQUENCY = 60 // widget refresh frequency in seconds
 // --------------------------------------------
 
 const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/
-const zoom_link_regex = /(https:\/\/.*zoom.*\/j\/[^ >]*)/
+const zoom_link_regex = /(https:\/\/[a-z]{2,20}.zoom.[a-z]{2,3}\/j\/[^ >]*)/
 const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ >]*)/
 const teams_link_regex = /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ >]*)/
 
