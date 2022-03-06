@@ -108,7 +108,7 @@ const Event = ({event, current_time}) => {
         ) ? "#e74c3c" : "#FFFFFF"
     return (
         <div
-            id={event.title}
+            key={event.title}
             style={{
                 fontWeight: "bold",
                 fontSize: "12px",
