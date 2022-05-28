@@ -22,4 +22,3 @@ Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](
 
 ## Ideas for enhancements
 
-- Buttons to switch date (at least +/- 1 day)
