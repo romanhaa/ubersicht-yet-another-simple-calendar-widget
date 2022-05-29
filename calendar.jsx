@@ -26,7 +26,7 @@ function getData(dispatch, offset) {
   const offsetString = offset > 0 ? `+${offset}` : `${offset}`;
   // construct bash command to grab today's events
   // Refer to https://hasseg.org/icalBuddy/man.html
-  const commandString = `/usr/local/bin/icalBuddy -ea -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,notes' -ps '||' -po 'datetime,title,location,notes' -tf '%H:%M' -df '%Y-%m-%d' eventsFrom:today${offsetString} to:today${offsetString}`;
+  const commandString = `/usr/local/bin/icalBuddy -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,notes' -ps '||' -po 'datetime,title,location,notes' -tf '%H:%M' -df '%Y-%m-%d' eventsFrom:today${offsetString} to:today${offsetString}`;
   run(commandString).then((output) =>
     dispatch({ type: 'UB/COMMAND_RAN', output })
   );
@@ -104,16 +104,25 @@ function processEvents(output) {
   const events = [];
   lines.forEach((line) => {
     const result = line_regex.exec(line);
-    events.push({
-      start_time_str: result[2].replace(/^0/, ''),
-      start_time: convertStrTimeToDecimal(result[2]),
-      end_time_str: result[4].replace(/^0/, ''),
-      end_time: convertStrTimeToDecimal(result[4]),
-      title: result[5],
-      zoom_link: getLink(result[6] + ' ' + result[7], zoom_link_regex),
-      gmeet_link: getLink(result[6] + ' ' + result[7], gmeet_link_regex),
-      teams_link: getLink(result[6] + ' ' + result[7], teams_link_regex),
-    });
+    if (result === null) {
+      const info = line.split(/\u001f/g);
+      events.push({
+        all_day: true,
+        title: info[1],
+      });
+    } else {
+      events.push({
+        all_day: false,
+        start_time_str: result[2].replace(/^0/, ''),
+        start_time: convertStrTimeToDecimal(result[2]),
+        end_time_str: result[4].replace(/^0/, ''),
+        end_time: convertStrTimeToDecimal(result[4]),
+        title: result[5],
+        zoom_link: getLink(result[6] + ' ' + result[7], zoom_link_regex),
+        gmeet_link: getLink(result[6] + ' ' + result[7], gmeet_link_regex),
+        teams_link: getLink(result[6] + ' ' + result[7], teams_link_regex),
+      });
+    }
   });
   return events;
 }
@@ -221,37 +230,45 @@ function Events({ date, offset, events }) {
 }
 
 function Event({ event, offset, current_time }) {
-  const border_thickness =
-    offset > 0 || offset < 0
-      ? 4
-      : event.start_time <= current_time && event.end_time >= current_time
-      ? 8
-      : 4;
-  const color =
-    offset > 0
-      ? '#FFF'
-      : offset < 0 || current_time >= event.end_time
-      ? '#808080'
-      : current_time - event.start_time >= -0.5 &&
-        current_time <= event.end_time
-      ? '#e74c3c'
-      : '#FFFFFF';
-  return (
-    <div
-      key={event.title}
-      class="event event-details"
-      style={{ color: color, borderLeft: `solid ${border_thickness}px` }}
-    >
-      {event.start_time_str === '0:00' && event.end_time_str === '0:00'
-        ? 'All-day'
-        : `${event.start_time_str} - ${event.end_time_str}`}
-      <Link label="zoom" values={event.zoom_link} color={color} />
-      <Link label="gmeet" values={event.gmeet_link} color={color} />
-      <Link label="teams" values={event.teams_link} color={color} />
-      <br />
-      {event.title}
-    </div>
-  );
+  if (event.all_day) {
+    return (
+      <div key={event.title} class="event event-details">
+        {event.title}
+      </div>
+    );
+  } else {
+    const border_thickness =
+      offset > 0 || offset < 0
+        ? 4
+        : event.start_time <= current_time && event.end_time >= current_time
+        ? 8
+        : 4;
+    const color =
+      offset > 0
+        ? '#FFF'
+        : offset < 0 || current_time >= event.end_time
+        ? '#808080'
+        : current_time - event.start_time >= -0.5 &&
+          current_time <= event.end_time
+        ? '#e74c3c'
+        : '#FFFFFF';
+    return (
+      <div
+        key={event.title}
+        class="event event-details"
+        style={{ color: color, borderLeft: `solid ${border_thickness}px` }}
+      >
+        {event.start_time_str === '0:00' && event.end_time_str === '0:00'
+          ? 'All-day'
+          : `${event.start_time_str} - ${event.end_time_str}`}
+        <Link label="zoom" values={event.zoom_link} color={color} />
+        <Link label="gmeet" values={event.gmeet_link} color={color} />
+        <Link label="teams" values={event.teams_link} color={color} />
+        <br />
+        {event.title}
+      </div>
+    );
+  }
 }
 
 function Loading() {
