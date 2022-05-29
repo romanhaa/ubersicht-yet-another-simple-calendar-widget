@@ -179,6 +179,10 @@ function Header({ date, offset, dispatch }) {
         class="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
       />
+      <i
+        class="fa fa-calendar-days header button-offset left-margin"
+        onClick={() => run('open /System/Applications/Calendar.app')}
+      />
     </div>
   );
 }
