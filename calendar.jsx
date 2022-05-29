@@ -35,6 +35,7 @@ function getData(dispatch, offset) {
 export const initialState = {
   output: '',
   offset: 0,
+  show_events: true,
 };
 
 // refresh frequency in milliseconds
@@ -145,7 +146,12 @@ function resetOffset(dispatch) {
   getData(dispatch, 0);
 }
 
-function Header({ date, offset, dispatch }) {
+function changeShowEvents(dispatch) {
+  DEBUG_LOG && console.log('change setting to show/hide events');
+  dispatch({ type: 'SHOW_EVENTS' });
+}
+
+function Header({ date, offset, show_events, dispatch }) {
   const month_names = [
     'January',
     'February',
@@ -178,6 +184,12 @@ function Header({ date, offset, dispatch }) {
       <i
         class="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
+      />
+      <i
+        class={`fa fa-eye${
+          show_events ? '-slash' : ''
+        } header button-offset left-margin`}
+        onClick={() => changeShowEvents(dispatch)}
       />
       <i
         class="fa fa-calendar-days header button-offset left-margin"
@@ -277,8 +289,13 @@ export function render({ output, offset, show_events }, dispatch) {
   return (
     <div id="calendar-widget">
       <link rel="stylesheet" href="/calendar/fontawesome.min.css"></link>
-      <Header date={dateToShow} offset={offset} dispatch={dispatch} />
-      {output === 'loading' ? (
+      <Header
+        date={dateToShow}
+        offset={offset}
+        show_events={show_events}
+        dispatch={dispatch}
+      />
+      {show_events !== true ? null : output === 'loading' ? (
         <Loading />
       ) : output === '' ? (
         <NoEvents />
@@ -312,6 +329,12 @@ export function updateState(event, previousState) {
       console.log({ event });
     }
     return { ...previousState, output: 'loading' };
+  } else if (event.type === 'SHOW_EVENTS') {
+    if (DEBUG_LOG) {
+      console.log("mode: 'SHOW_EVENTS'");
+      console.log({ event });
+    }
+    return { ...previousState, show_events: !previousState.show_events };
   } else {
     DEBUG_LOG && console.log('returning previous state');
     return { ...previousState };
