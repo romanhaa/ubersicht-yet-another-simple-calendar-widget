@@ -8,32 +8,25 @@ const TOP = 550; // top margin
 const LEFT = 24; // left margin
 const BOTTOM = 24; // bottom margin
 const REFRESH_FREQUENCY = 60; // widget refresh frequency in seconds
+const DEBUG_LOG = false;
 // --------------------------------------------
 
 import { run } from 'uebersicht';
 
-const line_regex = /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/;
-const zoom_link_regex = /(https:\/\/[a-z]{2,20}.zoom.[a-z]{2,3}\/j\/[^ >]*)/;
-const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ >]*)/;
-const teams_link_regex = /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ >]*)/;
-
 export function command(dispatch) {
-  // console.log("called 'command'");
+  DEBUG_LOG && console.log("called 'command'");
   getData(dispatch, undefined);
 }
 
 function getData(dispatch, offset) {
   if (offset === undefined) {
     const dateElement = document.getElementById('shown-date');
-    // console.log({ dateElement });
     offset = dateElement === null ? 0 : parseInt(dateElement.dataset.offset);
   }
-  // console.log({ offset });
   const offsetString = offset > 0 ? `+${offset}` : `${offset}`;
   // construct bash command to grab today's events
   // Refer to https://hasseg.org/icalBuddy/man.html
   const commandString = `/usr/local/bin/icalBuddy -ea -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,notes' -ps '||' -po 'datetime,title,location,notes' -tf '%H:%M' -df '%Y-%m-%d' eventsFrom:today${offsetString} to:today${offsetString}`;
-  // console.log(commandString);
   run(commandString).then((output) =>
     dispatch({ type: 'UB/COMMAND_RAN', output })
   );
@@ -43,29 +36,6 @@ export const initialState = {
   output: '',
   offset: 0,
 };
-
-export function updateState(event, previousState) {
-  // console.log("called 'updateState'")
-  // console.log({event})
-  switch (event.type) {
-    case 'UB/COMMAND_RAN':
-      // console.log({output: event.output})
-      if (typeof event.output !== 'undefined') {
-        // console.log("returning 'undefined'")
-        return { ...previousState, output: event.output };
-      }
-    case 'CHANGE_OFFSET':
-      // console.log({offset: event.offset})
-      if (typeof event.offset !== 'undefined') {
-        // console.log("returning 'undefined'")
-        return { ...previousState, offset: event.offset };
-      }
-    case 'LOADING':
-      return { ...previousState, output: 'loading' };
-    default:
-      return { ...previousState };
-  }
-}
 
 // refresh frequency in milliseconds
 export const refreshFrequency = REFRESH_FREQUENCY * 1000;
@@ -81,24 +51,20 @@ export const className = `
   z-index: 0;
   .header {
     display: inline-block;
+    margin-bottom: 5px;
   }
-  .dateInHeader {
+  .date-header {
     font-size: 16px;
     font-weight: bold;
     margin-left: 8px;
     margin-right: 8px;
-    margin-bottom: 5px;
   }
-  .buttonOffset {
+  .button-offset {
     color: #A9A9A9;
     font-size: 12px;
     user-select: none;
   }
-  .buttonOffsetChange {
-    margin-bottom: 5px;
-  }
-  .buttonOffsetReset {
-    margin-bottom: 5px;
+  .left-margin {
     margin-left: 5px;
   }
   .event {
@@ -108,8 +74,8 @@ export const className = `
     font-weight: bold;
     border-left: solid 4px;
     border-radius: 2px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     padding-left: 5px;
     mix-blend-mode: multiply;
     overflow: hidden;
@@ -122,11 +88,18 @@ export const className = `
   }
 `;
 
+const line_regex =
+  /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/;
+const zoom_link_regex = /(https:\/\/[a-z]{2,20}.zoom.[a-z]{2,3}\/j\/[^ >]*)/;
+const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ >]*)/;
+const teams_link_regex =
+  /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ >]*)/;
+
 function processEvents(output) {
-  // console.log({ output });
+  DEBUG_LOG && console.log({ output });
   const lines =
     output === undefined ? [] : output.split('\n').filter((item) => item);
-  // console.log({ lines });
+  DEBUG_LOG && console.log({ lines });
   const events = [];
   lines.forEach((line) => {
     const result = line_regex.exec(line);
@@ -159,14 +132,14 @@ function getLink(str, regex) {
 }
 
 function changeOffset(offset, val, dispatch) {
-  // console.log(`changing offset by ${val}`);
+  DEBUG_LOG && console.log(`changing offset by ${val}`);
   dispatch({ type: 'LOADING' });
   dispatch({ type: 'CHANGE_OFFSET', offset: offset + val });
   getData(dispatch, offset + val);
 }
 
 function resetOffset(dispatch) {
-  // console.log("resetting offset");
+  DEBUG_LOG && console.log('resetting offset');
   dispatch({ type: 'LOADING' });
   dispatch({ type: 'CHANGE_OFFSET', offset: 0 });
   getData(dispatch, 0);
@@ -190,20 +163,20 @@ function Header({ date, offset, dispatch }) {
   return (
     <div>
       <i
-        class="fa fa-angles-left header buttonOffset buttonOffsetChange"
+        class="fa fa-angles-left header button-offset button-offset-change"
         onClick={() => changeOffset(offset, -1, dispatch)}
       />
-      <div id="shown-date" class="header dateInHeader" data-offset={offset}>
+      <div id="shown-date" class="header date-header" data-offset={offset}>
         {`${date.getDate()}. ${
           month_names[date.getMonth()]
         } ${date.getFullYear()}`}
       </div>
       <i
-        class="fa fa-angles-right header buttonOffset buttonOffsetChange"
+        class="fa fa-angles-right header button-offset button-offset-change"
         onClick={() => changeOffset(offset, 1, dispatch)}
       />
       <i
-        class="fa fa-arrow-rotate-right header buttonOffset buttonOffsetReset"
+        class="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
       />
     </div>
@@ -211,7 +184,7 @@ function Header({ date, offset, dispatch }) {
 }
 
 function Events({ date, offset, events }) {
-  // console.log({ output });
+  DEBUG_LOG && console.log({ events });
   const current_time = date.getHours() + date.getMinutes() / 60;
   return (
     <div id="events">
@@ -287,10 +260,12 @@ function Link({ label, values, color }) {
       ));
 }
 
-export function render({ output, offset }, dispatch) {
-  // console.log("rendering...");
-  // console.log({ output });
-  // console.log({ offset });
+export function render({ output, offset, show_events }, dispatch) {
+  if (DEBUG_LOG) {
+    console.log('rendering...');
+    console.log({ output });
+    console.log({ offset });
+  }
   const dateToShow = new Date();
   dateToShow.setDate(dateToShow.getDate() + offset);
   const events =
@@ -308,4 +283,33 @@ export function render({ output, offset }, dispatch) {
       )}
     </div>
   );
+}
+
+export function updateState(event, previousState) {
+  if (DEBUG_LOG) {
+    console.log("called 'updateState'");
+    console.log({ event });
+  }
+  if (event.type === 'UB/COMMAND_RAN' && event.output !== undefined) {
+    if (DEBUG_LOG) {
+      console.log("mode: 'UB/COMMAND_RAN'");
+      console.log({ event });
+    }
+    return { ...previousState, output: event.output };
+  } else if (event.type === 'CHANGE_OFFSET' && event.offset !== undefined) {
+    if (DEBUG_LOG) {
+      console.log("mode: 'CHANGE_OFFSET'");
+      console.log({ event });
+    }
+    return { ...previousState, offset: event.offset };
+  } else if (event.type === 'LOADING') {
+    if (DEBUG_LOG) {
+      console.log("mode: 'LOADING'");
+      console.log({ event });
+    }
+    return { ...previousState, output: 'loading' };
+  } else {
+    DEBUG_LOG && console.log('returning previous state');
+    return { ...previousState };
+  }
 }
