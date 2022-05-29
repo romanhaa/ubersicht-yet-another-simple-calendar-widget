@@ -178,6 +178,7 @@ function Header({ date, offset, show_events, dispatch }) {
   return (
     <div>
       <i
+        title="Jump one day backward"
         class="fa fa-angles-left header button-offset button-offset-change"
         onClick={() => changeOffset(offset, -1, dispatch)}
       />
@@ -187,20 +188,24 @@ function Header({ date, offset, show_events, dispatch }) {
         } ${date.getFullYear()}`}
       </div>
       <i
+        title="Jump one day forward"
         class="fa fa-angles-right header button-offset button-offset-change"
         onClick={() => changeOffset(offset, 1, dispatch)}
       />
       <i
+        title="Show today's events"
         class="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
       />
       <i
+        title={`${show_events ? "Hide" : "Show"} events`}
         class={`fa fa-eye${
           show_events ? '-slash' : ''
         } header button-offset left-margin`}
         onClick={() => changeShowEvents(dispatch)}
       />
       <i
+        title="Open Calendar application"
         class="fa fa-calendar-days header button-offset left-margin"
         onClick={() => run('open /System/Applications/Calendar.app')}
       />
