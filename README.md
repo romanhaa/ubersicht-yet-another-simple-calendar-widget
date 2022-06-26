@@ -11,6 +11,8 @@ A currently ongoing event will be highlighted with red text and with a thicker b
 Events that start within the next 30 minutes will be highlighted with red text only.
 Past events use grey text.
 
+The buttons next to the date allow you to navigate between days, jump back to today, hide all events (for privacy) and open the Calendar desktop application (or a replacement if desired).
+
 It requires a dark background or modifications to the colors to be properly readable.
 
 Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](https://github.com/knazarov/ubersicht-calendar-widget).
@@ -22,3 +24,6 @@ Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](
 
 ## Ideas for enhancements
 
+- Fetch multiple days in background to speed up.
+- Have reproducible way to generate screenshots.
+- Add background color and opacity to customizable variables.
