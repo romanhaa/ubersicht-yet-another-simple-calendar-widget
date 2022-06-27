@@ -2,8 +2,8 @@
 
 This [Übersicht](http://tracesof.net/uebersicht/) widget displays calendar events.
 
-<img src="example.png" width="200px">
-<img src="example-no-events.png" width="200px">
+<img src="screenshot.png" width="200px">
+<img src="screenshot-no-events.png" width="200px">
 
 If an event has a Zoom, Google Meet and/or Teams link attached to it (as location or in notes), a link will be shown to join the respective call.
 
