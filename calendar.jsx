@@ -92,10 +92,10 @@ export const className = `
 
 const line_regex =
   /^(\d+-\d+-\d+)?(?: at )?(\d+:\d+) - (\d+-\d+-\d+)?(?: at )?((?:\d+:\d+)|(?:\.\.\.))([^]*)?([^]*)?([^]*)?$/;
-const zoom_link_regex = /(https:\/\/[a-z]{2,20}.zoom.[a-z]{2,3}\/j\/[^ >]*)/;
-const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^ >]*)/;
+const zoom_link_regex = /(https:\/\/[a-z]{2,20}.zoom.[a-z]{2,3}\/j\/[^\n <>]*)/;
+const gmeet_link_regex = /(https:\/\/meet\.google\.com\/[^\n <>]*)/;
 const teams_link_regex =
-  /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^ >]*)/;
+  /(https:\/\/teams\.microsoft\.com\/l\/meetup-join\/[^\n <>]*)/;
 
 function processEvents(output) {
   DEBUG_LOG && console.log({ output });
