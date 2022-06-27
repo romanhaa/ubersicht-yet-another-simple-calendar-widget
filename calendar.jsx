@@ -28,7 +28,13 @@ function getData(dispatch, offset) {
   const offsetString = offset > 0 ? `+${offset}` : `${offset}`;
   // construct bash command to grab today's events
   // Refer to https://hasseg.org/icalBuddy/man.html
-  const commandString = `/usr/local/bin/icalBuddy -npn -nrd -nc -b '' -nnr ' ' -iep 'title,datetime,location,notes' -ps '||' -po 'datetime,title,location,notes' -tf '%H:%M' -df '%Y-%m-%d' eventsFrom:today${offsetString} to:today${offsetString}`;
+  const commandString =
+    '/usr/local/bin/icalBuddy ' +
+    '-npn -nrd -b "" -nnr "<newline>" -ps "||" ' +
+    '-iep "datetime,title,location,notes" ' +
+    '-po "datetime,title,location,notes" ' +
+    '-tf "%H:%M" -df "%Y-%m-%d" ' +
+    `eventsFrom:today${offsetString} to:today${offsetString}`;
   run(commandString).then((output) =>
     dispatch({ type: 'UB/COMMAND_RAN', output })
   );
