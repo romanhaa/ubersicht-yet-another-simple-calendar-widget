@@ -252,8 +252,14 @@ function Events({ date, offset, events }) {
 
 function Event({ event, offset, current_time }) {
   if (event.all_day) {
+    const color = offset < 0 ? '#808080' : '#FFF';
     return (
-      <div key={event.title} class="event event-details">
+      <div
+        key={event.title}
+        class="event event-details"
+        title={`Calendar: ${event.calendar}`}
+        style={{ color: color }}
+      >
         {event.title}
       </div>
     );
