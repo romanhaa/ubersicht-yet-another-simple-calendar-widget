@@ -85,6 +85,11 @@ export const className = `
   .left-margin {
     margin-left: 5px;
   }
+  .icon-container {
+    display: inline-block;
+    text-align: center;
+    width: 22px;
+  }
   .event {
     font-size: 12px;
   }
@@ -213,13 +218,15 @@ function Header({ date, offset, show_events, dispatch }) {
         class="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
       />
-      <i
-        title={`${show_events ? "Hide" : "Show"} events`}
-        class={`fa fa-eye${
-          show_events ? '-slash' : ''
-        } header button-offset left-margin`}
-        onClick={() => changeShowEvents(dispatch)}
-      />
+      <div class="icon-container">
+        <i
+          title={`${show_events ? 'Hide' : 'Show'} events`}
+          class={`fa fa-eye${
+            show_events ? '-slash' : ''
+          } header button-offset left-margin`}
+          onClick={() => changeShowEvents(dispatch)}
+        />
+      </div>
       <i
         title="Open Calendar application"
         class="fa fa-calendar-days header button-offset left-margin"
