@@ -192,7 +192,7 @@ function Header({ date, offset, show_events, dispatch }) {
     'December',
   ];
   return (
-    <div>
+    <div id="header">
       <i
         title="Jump one day backward"
         class="fa fa-angles-left header button-offset button-offset-change"
