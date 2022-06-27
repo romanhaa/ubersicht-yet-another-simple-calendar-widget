@@ -7,6 +7,7 @@ const WIDTH = 250; // width of the widget
 const TOP = 550; // top margin
 const LEFT = 24; // left margin
 const BOTTOM = 24; // bottom margin
+const BACKGROUND_COLOR = 'rgba(0, 0, 0, 0)';
 const REFRESH_FREQUENCY = 60; // widget refresh frequency in seconds
 const CALENDAR_APP = '/System/Applications/Calendar.app';
 const DEBUG_LOG = false;
@@ -47,10 +48,19 @@ export const className = `
   left: ${LEFT}px;
   bottom: ${BOTTOM}px;
   width: ${WIDTH}px;
-  color: #FFFFFF;
-  font-family: Helvetica;
-  overflow: hidden;
-  z-index: 0;
+  .calendar-widget {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    background: ${BACKGROUND_COLOR};
+    backdrop-filter: blur(2px);
+    color: #FFFFFF;
+    font-family: Helvetica;
+    overflow: hidden;
+    z-index: 0;
+  }
   .header {
     display: inline-block;
     margin-bottom: 5px;
@@ -79,7 +89,6 @@ export const className = `
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 5px;
-    mix-blend-mode: multiply;
     overflow: hidden;
     margin-bottom: 5px;
     width: ${WIDTH - 5}px;
@@ -310,7 +319,7 @@ export function render({ output, offset, show_events }, dispatch) {
   const events =
     output === '' || output === 'loading' ? [] : processEvents(output);
   return (
-    <div id="calendar-widget">
+    <div class="calendar-widget">
       <link rel="stylesheet" href="/calendar/fontawesome.min.css"></link>
       <Header
         date={dateToShow}
