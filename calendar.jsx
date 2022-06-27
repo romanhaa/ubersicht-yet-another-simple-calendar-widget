@@ -8,6 +8,7 @@ const TOP = 550; // top margin
 const LEFT = 24; // left margin
 const BOTTOM = 24; // bottom margin
 const REFRESH_FREQUENCY = 60; // widget refresh frequency in seconds
+const CALENDAR_APP = '/System/Applications/Calendar.app';
 const DEBUG_LOG = false;
 // --------------------------------------------
 
@@ -207,7 +208,7 @@ function Header({ date, offset, show_events, dispatch }) {
       <i
         title="Open Calendar application"
         class="fa fa-calendar-days header button-offset left-margin"
-        onClick={() => run('open /System/Applications/Calendar.app')}
+        onClick={() => run(`open ${CALENDAR_APP}`)}
       />
     </div>
   );
