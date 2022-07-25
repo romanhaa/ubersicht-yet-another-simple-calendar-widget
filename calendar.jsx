@@ -30,7 +30,7 @@ function getData(dispatch, offset) {
   // Refer to https://hasseg.org/icalBuddy/man.html
   const commandString =
     '/usr/local/bin/icalBuddy ' +
-    '-npn -nrd -b "" -nnr "<newline>" -ps "||" ' +
+    '-npn -nrd -b "<newevent>" -nnr "<newline>" -ps "||" ' +
     '-iep "datetime,title,location,notes" ' +
     '-po "datetime,title,location,notes" ' +
     '-tf "%H:%M" -df "%Y-%m-%d" ' +
@@ -120,7 +120,9 @@ const teams_link_regex =
 function processEvents(output) {
   DEBUG_LOG && console.log({ output });
   const lines =
-    output === undefined ? [] : output.split('\n').filter((item) => item);
+    output === undefined
+      ? []
+      : output.split('<newevent>').filter((item) => item);
   DEBUG_LOG && console.log({ lines });
   const events = [];
   lines.forEach((line) => {
