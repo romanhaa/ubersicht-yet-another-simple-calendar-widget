@@ -145,6 +145,7 @@ function processEvents(output) {
         end_time_str: result[4].replace(/^0/, ''),
         end_time: convertStrTimeToDecimal(result[4]),
         title: result[5].substring(0, result[5].lastIndexOf('(')),
+        location: result[6],
         zoom_link: getLink(result[6] + ' ' + result[7], zoom_link_regex),
         gmeet_link: getLink(result[6] + ' ' + result[7], gmeet_link_regex),
         teams_link: getLink(result[6] + ' ' + result[7], teams_link_regex),
@@ -297,7 +298,11 @@ function Event({ event, offset, current_time }) {
       <div
         key={event.title}
         class="event event-details"
-        title={`Calendar:\n${event.calendar}\n\nNotes:\n${event.notes}`}
+        title={
+          (event.calendar !== '' ? `Calendar:\n${event.calendar}` : '') +
+          (event.location !== '' ? `\n\nLocation:\n${event.location}` : '') +
+          (event.notes !== '' ? `\n\nNotes:\n${event.notes}` : '')
+        }
         style={{ color: color, borderLeft: `solid ${border_thickness}px` }}
       >
         {event.start_time_str === '0:00' && event.end_time_str === '0:00'
