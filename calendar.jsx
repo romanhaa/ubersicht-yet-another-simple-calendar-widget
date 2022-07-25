@@ -25,7 +25,7 @@ function getData(dispatch, offset) {
     const dateElement = document.getElementById('shown-date');
     offset = dateElement === null ? 0 : parseInt(dateElement.dataset.offset);
   }
-  const offsetString = offset > 0 ? `+${offset}` : `${offset}`;
+  const offsetString = offset >= 0 ? `+${offset}` : `${offset}`;
   // construct bash command to grab today's events
   // Refer to https://hasseg.org/icalBuddy/man.html
   const commandString =
