@@ -27,3 +27,7 @@ Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](
 - Fetch multiple days in background to speed up.
 - Have reproducible way to generate screenshots.
 - Add background color and opacity to customizable variables.
+
+## Acknowledgements
+
+- Icons from [fontawesome.com](https://fontawesome.com/)
