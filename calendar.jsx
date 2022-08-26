@@ -208,28 +208,28 @@ function Header({ date, offset, show_events, dispatch }) {
     <div id="header">
       <i
         title="Jump one day backward"
-        class="fa fa-angles-left header button-offset button-offset-change"
+        className="fa fa-angles-left header button-offset button-offset-change"
         onClick={() => changeOffset(offset, -1, dispatch)}
       />
-      <div id="shown-date" class="header date-header" data-offset={offset}>
+      <div id="shown-date" className="header date-header" data-offset={offset}>
         {`${date.getDate()}. ${
           month_names[date.getMonth()]
         } ${date.getFullYear()}`}
       </div>
       <i
         title="Jump one day forward"
-        class="fa fa-angles-right header button-offset button-offset-change"
+        className="fa fa-angles-right header button-offset button-offset-change"
         onClick={() => changeOffset(offset, 1, dispatch)}
       />
       <i
         title="Show today's events"
-        class="fa fa-arrow-rotate-right header button-offset left-margin"
+        className="fa fa-arrow-rotate-right header button-offset left-margin"
         onClick={() => resetOffset(dispatch)}
       />
-      <div class="icon-container">
+      <div className="icon-container">
         <i
           title={`${show_events ? 'Hide' : 'Show'} events`}
-          class={`fa fa-eye${
+          className={`fa fa-eye${
             show_events ? '-slash' : ''
           } header button-offset left-margin`}
           onClick={() => changeShowEvents(dispatch)}
@@ -237,7 +237,7 @@ function Header({ date, offset, show_events, dispatch }) {
       </div>
       <i
         title="Open Calendar application"
-        class="fa fa-calendar-days header button-offset left-margin"
+        className="fa fa-calendar-days header button-offset left-margin"
         onClick={() => run(`open ${CALENDAR_APP}`)}
       />
     </div>
@@ -271,7 +271,7 @@ function Event({ event, offset, current_time }) {
     return (
       <div
         key={event.title}
-        class="event event-details"
+        className="event event-details"
         title={`Calendar: ${event.calendar}`}
         style={{ color: color }}
       >
@@ -297,7 +297,7 @@ function Event({ event, offset, current_time }) {
     return (
       <div
         key={event.title}
-        class="event event-details"
+        className="event event-details"
         title={
           (event.calendar !== '' ? `Calendar:\n${event.calendar}` : '') +
           (event.location !== '' ? `\n\nLocation:\n${event.location}` : '') +
@@ -319,10 +319,10 @@ function Event({ event, offset, current_time }) {
 }
 
 function Loading() {
-  return <div class="event">...loading...</div>;
+  return <div className="event">...loading...</div>;
 }
 function NoEvents() {
-  return <span class="event">No events.</span>;
+  return <span className="event">No events.</span>;
 }
 
 function Link({ label, values, color }) {
@@ -331,7 +331,7 @@ function Link({ label, values, color }) {
     : values.map((value) => (
         <a
           key={value}
-          class="meetingLink"
+          className="meetingLink"
           href={value}
           style={{ color: color }}
           title={value}
@@ -352,7 +352,7 @@ export function render({ output, offset, show_events }, dispatch) {
   const events =
     output === '' || output === 'loading' ? [] : processEvents(output);
   return (
-    <div class="calendar-widget">
+    <div className="calendar-widget">
       <link rel="stylesheet" href="/calendar/fontawesome.min.css"></link>
       <Header
         date={dateToShow}
