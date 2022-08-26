@@ -19,7 +19,7 @@ Inspiration and some code was taken from [`knazarov/ubersicht-calendar-widget`](
 
 ## How to install
 
-- Create a new directory in the Übersicht widgets directory, e.g. `calendar`, and place the [`calendar.jsx`](calendar.jsx) file in it.
+- Download the `.zip` archive and place the content (a directory called `yet-another-simple-calendar.widget`) in the Übersicht widgets directory.
 - Open the `calendar.jsx` file and adjust values in the "CUSTOMIZE ME" section to adjust widget placement and size.
 
 ## Ideas for enhancements

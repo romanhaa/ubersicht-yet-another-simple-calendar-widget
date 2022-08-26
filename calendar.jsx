@@ -353,7 +353,10 @@ export function render({ output, offset, show_events }, dispatch) {
     output === '' || output === 'loading' ? [] : processEvents(output);
   return (
     <div className="calendar-widget">
-      <link rel="stylesheet" href="/calendar/fontawesome.min.css"></link>
+      <link
+        rel="stylesheet"
+        href="/yet-another-simple-calendar.widget/fontawesome.min.css"
+      ></link>
       <Header
         date={dateToShow}
         offset={offset}
