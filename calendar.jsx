@@ -355,7 +355,7 @@ export function render({ output, offset, show_events }, dispatch) {
     <div className="calendar-widget">
       <link
         rel="stylesheet"
-        href="/yet-another-simple-calendar.widget/fontawesome.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       ></link>
       <Header
         date={dateToShow}
